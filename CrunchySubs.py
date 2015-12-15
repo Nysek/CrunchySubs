@@ -12,7 +12,7 @@ import re
 try:
     from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 except ImportError as e:
-    print("CrunchySubs necesita de BeautifulSoup3 para poder funcionar.")
+    print("CrunchySubs requires BeautifulSoup3 in order to function properly.")
     sleep(60)
     exit()
 import urllib2
@@ -31,13 +31,15 @@ from crypto.cipher.base import noPadding
 from array import array
 about = '''
 CrunchySubs v1.4 beta
-CrunchySubs es un script hecho en python que permite descargar subtítulos de Crunchyroll de forma premium y free.
-Créditos:
-Autor original de la función para desencriptar: Desconocido para mí, si alguien sabe, favor dejar un comentario en el blog, por Github o mediante un correo.
+CrunchySubs is a script written in python, which allows downloading subtitles from Crunchyroll in the form of premium and free.
+Credits:
+Autor original de la función para desencriptar: Unkown to me, if someone knows, please leave a comment in the my blog, by Github or send me an email.
 
-Autor del resto del script: Touman (Miguel A.). Más información del script en: http://crunchysubs.blogspot.com/ y https://github.com/7ouma/CrunchySubs
+The author of the orginal script: Touman (Miguel A.). More info about the script at: http://crunchysubs.blogspot.com/ and https://github.com/7ouma/CrunchySubs
 
-Puedes contactarme mediante mi correo: 7ouman@gmail.com
+You can reach me by Email: 7ouman@gmail.com
+
+Translated by (https://github.com/Nysek)
 
 '''
 class Base64Decoder:
@@ -267,7 +269,7 @@ class CrunchySubs(crunchyDec):
                     break
                 else:
                     if not self.CheckDir(self.dir):
-                        self.addError("\n%s no existe. Se usará la carpeta del script."%(self.dir))
+                        self.addError("\n%s Does not exsist. Se usará la carpeta del script."%(self.dir))
                         self.dir = "default"
                         self.error = True
                     else:break
@@ -303,7 +305,7 @@ class CrunchySubs(crunchyDec):
             with open(filename) as config:
                 return json.load(config)
         except (OSError, IOError),e:
-            self.addError("Config.json no existe. Config.json ha sido creado.")
+            self.addError("Config.json does not exsist. Config.json has been created.")
             self.config()
             return False
         except ValueError:
@@ -361,7 +363,7 @@ class CrunchySubs(crunchyDec):
     	subtitulos = BeautifulSoup(xml)
     	subtitulos = subtitulos.findAll(u"subtitle")
     	if not subtitulos:
-    		self.addError("Error: Debes ser usuario premium para poder descargar este subtítulo.")
+    		self.addError("Error: You need to be a premium user to download this subtitle.")
     		return False
     	subs_lang = []
     	subs_url = []
@@ -456,19 +458,19 @@ if __name__ == '__main__':
             return string.encode('utf8')
 
 
-    MenuTxt = '''Opciones:
-1.- Descargar.
+    MenuTxt = '''Options:
+1.- Download.
 2.- Descargar paquete de enlaces.
 3.- Login.
-4.- Configuración.
-5.- Acerca de..
-0.- Salir.
+4.- Configuration.
+5.- About..
+0.- Exit.
 >'''
 
     SettingsTxt = '''Editar configuración:
-1.- Directorio de descargas.
-2.- Lenguaje de preferencia.
-0.- Cancelar.
+1.- Download directory.
+2.- Language preferences.
+0.- Cancel.
 >'''
 #http://www.crunchyroll.com/naruto-shippuden/episode-425-the-infinite-dream-677385
     while True:
@@ -494,7 +496,7 @@ if __name__ == '__main__':
                             if subs.lang.lower() == "none":
                                 while True:
                                     esta = False
-                                    print("Lenguajes disponibles:")
+                                    print("Available Languages:")
                                     c = 1
                                     for i in sublist[0]:
                                         string = "%d) %s."%(c,i)
@@ -503,7 +505,7 @@ if __name__ == '__main__':
                                         except UnicodeEncodeError:
                                             print(print2(string))
                                         c += 1
-                                    print (("%d) Todos los lenguajes.\n0) Cancelar"%(c)) if (len(sublist[0]) > 1) else "0) Cancelar.")
+                                    print (("%d) All the languages.\n0) Cancel"%(c)) if (len(sublist[0]) > 1) else "0) Cancel.")
                                     seleccion = str(raw_input("> "))
                                     if seleccion == "0":
                                         cls()
@@ -514,7 +516,7 @@ if __name__ == '__main__':
                                                 esta = True
                                                 break
                                         if not esta: 
-                                            print (u"Opción invalida.") 
+                                            print (u"Invalid option.") 
                                         else: 
                                             break
                             else:
@@ -522,10 +524,10 @@ if __name__ == '__main__':
                                 seleccion = -1
                             if esta:
                                 if int(seleccion)-1 == len(sublist[0]) or subs.lang == "*":
-                                    print("Descargando todos los idiomas disponibles.\n")
+                                    print("Download all the available languages.\n")
                                     for (lang,url) in izip(sublist[0],sublist[1]):
                                         titulo = subs.returnTitle(lang)
-                                        string = "Descargando: %s"%(titulo)
+                                        string = "Downloading: %s"%(titulo)
                                         try:
                                             print (string)
                                         except UnicodeEncodeError:
@@ -545,7 +547,7 @@ if __name__ == '__main__':
                                     else:
                                         titulo = subs.returnTitle(sublist[0][int(seleccion)-1])
                                     if listo:
-                                        string = "Descargando: %s"%(titulo)
+                                        string = "Downloading: %s"%(titulo)
                                         try:
                                             print (string)
                                         except UnicodeEncodeError:
@@ -563,12 +565,12 @@ if __name__ == '__main__':
             elif option == "3":
                 cls()
                 print("////////Login//////////")
-                user = str(raw_input("Usuario: "))
-                password = str(raw_input("Contraseña: "))
+                user = str(raw_input("User: "))
+                password = str(raw_input("Password: "))
                 if subs.login(user,password):
-                    print("Te has logeado satisfactoriamente.\n\n") 
+                    print("You have logged-in successfully.\n\n") 
                 else:
-                    print("Usuario o contraseña incorrecta. Por favor verifica e intenta nuevamente.\n\n")
+                    print("Incorrect password or user. Please verify and try again.\n\n")
                 sleep(3)
                 cls()
 
@@ -596,7 +598,7 @@ if __name__ == '__main__':
                                     elif subs.CheckDir(dir):
                                         edit = True
                                     else:
-                                        print ("Directorio invalido. \"%s\" no existe."%dir)
+                                        print ("Directorio invalido. \"%s\" Does not exist."%dir)
 
                                     if edit:
                                         subs.config(
@@ -607,16 +609,15 @@ if __name__ == '__main__':
                                 elif option == "0":
                                     break
                                 else:
-                                    print ("Opción invalida.")
+                                    print ("Invaild Option.")
                         elif option == "2":
                             while True:
                                 settings = subs.LoadSettings()
                                 ayuda = ''' 
-None = Mostrará una lista de subtitulos disponibles de la cual podrás escoger.
-* = Descargará todos los lenguajes disponibles.
-
-Puedes ingresar un lenguaje por defecto, por ejemplo "Español". Este deberá coincidir con el lenguaje mostrado en la página de crunchyroll.
-Algunos lenguajes de los que tengo conocimiento son:
+None = Will show a list of avaible subtitles of which you could choose from.
+* = Download all available languages.
+You can choose a language by default, for example "Español". This should coincide with the languge shown in the Crunchroll page.
+Some laguages which I know of:
 -) English (US)
 -) Español
 -) Español (España)
@@ -642,23 +643,23 @@ Algunos lenguajes de los que tengo conocimiento son:
                                 elif option == "0":
                                     break
                                 else:
-                                    print ("Opción invalida.")
+                                    print ("Invaild Option.")
                         elif option == "0":
                             sett = False
                             break
                         else:
-                            print ("Opción invalida.")
+                            print ("Invaild Option.")
                     if not sett:
                         break
                 cls()
             elif option == "5":
                 print(about)
             elif option == "0":
-                print("Gracias por usar CrunchySubs (:...")
+                print("Thank you for using CrunchySubs (:...")
                 Menu = False
                 sleep(3)
                 break
             else:
-                print ("Opción invalida.")
+                print ("Invaild Option.")
         if not Menu:
             break
